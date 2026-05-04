@@ -6,10 +6,11 @@ import android.os.Bundle
 import android.view.MotionEvent
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import com.punchthrough.blestarterappandroid.R
 import com.punchthrough.blestarterappandroid.ble.ConnectionManager
 import timber.log.Timber
 import java.util.UUID
+import kotlin.math.cos
+import kotlin.math.sin
 
 class Controller : AppCompatActivity() {
 
@@ -28,35 +29,45 @@ class Controller : AppCompatActivity() {
         // 3. Link your UI Buttons (ensure these IDs match your XML)
        // val btnLedOn = findViewById<Button>(R.id.button_led_on)
 
+//
+//        val btnControl = findViewById<Button>(R.id.button_led_on)
+//        btnControl.setOnTouchListener { view, event ->
+//            when (event.action) {
+//                MotionEvent.ACTION_DOWN -> {
+//                    sendToArduino("B1D")
+//                    true
+//                }
+//                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+//                    sendToArduino("B1U")
+//                    true
+//                }
+//                else -> false
+//            }
+//        }
 
-        val btnControl = findViewById<Button>(R.id.button_led_on)
-        btnControl.setOnTouchListener { view, event ->
-            when (event.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    sendToArduino("1")
-                    true
-                }
-                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                    sendToArduino("0")
-                    true
-                }
-                else -> false
-            }
+        val joystick = findViewById<JoystickView>(R.id.Rotate)
+        joystick.onMoveListener = { angle, strength ->
+            sendJoystickPosition(angle, strength,"rt")
         }
 
-        val joystick = findViewById<JoystickView>(R.id.joystick_custom)
-        joystick.onMoveListener = { angle, strength ->
-            sendJoystickPosition(angle, strength)
+        val Arm = findViewById<JoystickView>(R.id.ArmControl)
+        Arm.onMoveListener = { angle, strength ->
+            sendJoystickPosition(angle, strength,"ra")
+        }
+
+        val move = findViewById<JoystickView>(R.id.Move)
+        move.onMoveListener = { angle, strength ->
+            sendJoystickPosition(angle, strength,"mv")
         }
     }
 
-    private fun sendJoystickPosition(angle: Int, strength: Int) {
+    private fun sendJoystickPosition(angle: Int, strength: Int, joyStickName : String) {
         val rad = Math.toRadians(angle.toDouble())
         val nx = cos(rad) * strength / 100.0
         val ny = -sin(rad) * strength / 100.0
-        val bx = ((nx + 1.0) * 127.5).toInt().coerceIn(0, 255)
-        val by = ((ny + 1.0) * 127.5).toInt().coerceIn(0, 255)
-        sendToArduino("J,$bx,$by\n")
+        val bx = ((nx + 1.0) * 127.5).toInt().coerceIn(0, 255)-127
+        val by = ((ny + 1.0) * 127.5).toInt().coerceIn(0, 255)-127
+        sendToArduino("$joyStickName,$bx,$by\n")
     }
 
     private fun sendToArduino(command: String) {
