@@ -36,7 +36,7 @@ class Controller : AppCompatActivity() {
 //                MotionEvent.ACTION_DOWN -> {
 //                    sendToArduino("B1D")
 //                    true
-//                }
+//                }+9+y       7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777;;7.30
 //                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
 //                    sendToArduino("B1U")
 //                    true
@@ -47,7 +47,7 @@ class Controller : AppCompatActivity() {
 
         val joystick = findViewById<JoystickView>(R.id.Rotate)
         joystick.onMoveListener = { angle, strength ->
-            sendJoystickPosition(angle, strength,"rt")
+            sendJoystickPosition(angle, strength,"mrt")
         }
 
         val Arm = findViewById<JoystickView>(R.id.ArmControl)

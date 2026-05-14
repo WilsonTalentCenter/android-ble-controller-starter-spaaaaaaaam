@@ -11,7 +11,7 @@ Companion Android app project for [Punch Through](https://punchthrough.com)'s "U
 
 - Scanning for nearby BLE devices
 - Connecting to BLE devices
-- Discovering services and characteristics
+- Discoverin[app](app)g services and characteristics
 - Requesting an ATT MTU update
 - Reading and writing data on characteristics and descriptors
 - Enabling and disabling notifications and indications on characteristics
